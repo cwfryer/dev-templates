@@ -19,9 +19,9 @@
     flake-utils.lib.eachDefaultSystem (
       system: let
         pkgs = import nixpkgs {inherit system;};
-        toolchain = fenix.packages."${system}".stable;
+        toolchain = fenix.packages."${system}".stable.toolchain;
       in rec {
-        devShells = pkgs.mkShell {
+        devShell = pkgs.mkShell {
           nativeBuildInputs = [
             toolchain
           ];
