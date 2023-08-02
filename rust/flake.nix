@@ -10,15 +10,16 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = {
-    nixpkgs,
-    fenix,
-    flake-utils,
-    ...
-  }:
+  outputs =
+    { nixpkgs
+    , fenix
+    , flake-utils
+    , ...
+    }:
     flake-utils.lib.eachDefaultSystem (
-      system: let
-        pkgs = import nixpkgs {inherit system;};
+      system:
+      let
+        pkgs = import nixpkgs { inherit system; };
         # you either want `stable` or `latest` (aka nightly)
         toolchain = fenix.packages."${system}".stable.toolchain;
         # <whatever>.toolchain will give you all the tools.
@@ -31,7 +32,8 @@
         #     targets.wasm32-unknown-unknown.latest.rust-std
         #   ];
         # See https://github.com/nix-community/fenix documentation
-      in rec {
+      in
+      rec {
         devShell = pkgs.mkShell {
           nativeBuildInputs = [
             toolchain
@@ -40,7 +42,7 @@
             openssl
             lld
           ];
-          packages = with pkgs; [];
+          packages = with pkgs; [ ];
           shellHook = ''
             export PATH=$PATH:''${CARGO_HOME:-~/.cargo}/bin
             export PATH=$PATH:''${RUSTUP_HOME:-~/.rustup}/toolchains/$RUSTC_VERSION-x86_64-unknown-linux-gnu/bin/
